@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chocoberry — Copos de Morango com Chocolate</title>
+  <meta name="description" content="Chocoberry — Copos com morango e cobertura de chocolate. Monte seu copo com adicionais como Granola, Castanhas, M&Ms e muito mais." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #f9f7f5;
+      --foreground: #1a1512;
+      --card: #fdfcfb;
+      --primary: #a62639;
+      --primary-foreground: #faf8f7;
+      --secondary: #f0ebe5;
+      --muted: #f5e8e8;
+      --muted-foreground: #6b6360;
+      --accent: #4a2c2a;
+      --chocolate: #4a2c2a;
+      --chocolate-light: #6b4a3a;
+      --strawberry-light: #d64d5e;
+      --gold: #d4a84b;
+      --border: #e5e0da;
+      --logo-height: 64px;
+      --focus-ring: rgba(212,168,75,0.25);
+      --whatsapp-green: #25D366;
+      --whatsapp-dark: #128C7E;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height: 1.6;
+    }
+
+    h1,h2,h3,h4,h5,h6 { font-family: 'Playfair Display', serif; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+    /* accessible focus outlines for keyboard users */
+    :focus { outline: none; }
+    :focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 0;
+      transition: all .3s;
+      background: transparent;
+    }
+    .header.scrolled {
+      background: rgba(253,252,251,0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(74,44,42,0.1);
+      padding: 1rem 0;
+    }
+    .header-content { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+
+    .logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; font-family:'Playfair Display', serif; font-size:1.25rem; font-weight:700; color:var(--primary-foreground); }
+    .logo img { height: var(--logo-height); width:auto; object-fit:contain; display:block; border-radius:6px; background:transparent; }
+    .brand-text { display:flex; flex-direction:column; line-height:1; color:var(--strawberry-light); }
+    .brand-text .title { font-size:1.125rem; font-weight:700; color:var(--strawberry-light); }
+    .brand-text .tag { font-size:.75rem; color:rgba(26,21,18,0.7); font-weight:500; margin-top:.125rem; }
+
+    .nav { display:none; }
+    @media (min-width:768px) { .nav { display:flex; gap:2rem; } }
+    .nav a { text-decoration:none; font-weight:500; color:var(--primary-foreground); }
+    .nav a:hover { color:var(--primary); }
+
+    .btn { display:inline-block; padding:.75rem 1.5rem; border-radius:50px; font-weight:600; text-decoration:none; transition: transform .15s, box-shadow .15s; cursor:pointer; border:none; background:transparent; color:inherit; }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(166,38,57,0.12);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .btn-outline {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn-cta {
+      background: linear-gradient(180deg, var(--gold), #c99d3f);
+      color: #ffffff;
+      padding: .9rem 1.4rem;
+      border-radius: 999px;
+      font-weight:700;
+      border:1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 30px rgba(196,160,80,0.14);
+    }
+
+    /* WhatsApp styled button */
+    #sendWhatsapp {
+      --pad-x: 1.1rem;
+      --pad-y: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: var(--pad-y) var(--pad-x);
+      border-radius: 999px;
+      color: white;
+      background: linear-gradient(180deg, var(--whatsapp-green), var(--whatsapp-dark));
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 8px 28px rgba(18,140,126,0.12);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      text-decoration: none;
+    }
+    #sendWhatsapp:hover { transform: translateY(-3px); filter:brightness(.98); box-shadow: 0 14px 40px rgba(18,140,126,0.14); }
+    #sendWhatsapp:focus { outline: 3px solid rgba(37,211,102,0.18); outline-offset: 3px; }
+
+    #sendWhatsapp::before {
+      content: "📲";
+      display:inline-block;
+      font-size:1.05rem;
+      margin-left: -0.15rem;
+    }
+
+    /* Hero */
+    .hero { position:relative; min-height:70vh; display:flex; align-items:center; justify-content:center; overflow:hidden; padding-top:5.5rem; }
+    .hero-bg { position:absolute; inset:0; }
+    .hero-bg img { width:100%; height:100%; object-fit:cover; filter:brightness(.6) saturate(.9); }
+    .hero-overlay { position:absolute; inset:0; background: linear-gradient(to bottom, rgba(74,44,42,0.55), rgba(74,44,42,0.35), var(--background)); }
+    .hero-content { position:relative; z-index:10; text-align:center; padding:2rem; max-width:820px; margin:0 auto; }
+
+    .hero-badge {
+      display:inline-block; padding:.5rem 1rem; margin-bottom:1rem; font-size:.875rem; font-weight:500; text-transform:uppercase; letter-spacing:.1em;
+      background: rgba(255,107,159,0.12);
+      color: #ffffff; /* requested: Copos Chocoberry in white */
+      border-radius:50px;
+      border:1px solid rgba(255,107,159,0.12);
+    }
+
+    .hero h1 { font-size:3rem; font-weight:700; color:var(--primary-foreground); margin-bottom:1rem; line-height:1.1; }
+    @media (min-width:768px) { .hero h1 { font-size:4rem; } }
+    .hero p { font-size:1.125rem; color: rgba(250,248,247,0.95); max-width:700px; margin:0 auto 1.5rem; font-weight:300; }
+
+    .hero-buttons { display:flex; flex-direction:column; gap:1rem; justify-content:center; }
+    @media (min-width:640px) { .hero-buttons { flex-direction:row; } }
+    .hero-buttons .btn { padding:1rem 2rem; }
+
+    /* Sections */
+    .section { padding:6rem 0; }
+    .section-header { text-align:center; margin-bottom:4rem; }
+    .section-badge { display:inline-block; padding:.5rem 1rem; margin-bottom:1rem; font-size:.875rem; font-weight:500; text-transform:uppercase; letter-spacing:.1em; background: rgba(166,38,57,0.1); color:var(--primary); border-radius:50px; }
+    .section-title { font-size:2.5rem; font-weight:700; color:var(--foreground); margin-bottom:1rem; }
+    @media (min-width:768px) { .section-title { font-size:3rem; } }
+    .section-subtitle { color:var(--muted-foreground); max-width:600px; margin:0 auto; }
+
+    /* Menu */
+    .menu-section { background: rgba(240,235,229,0.5); }
+    .menu-grid { display:grid; gap:2rem; }
+    @media (min-width:768px) { .menu-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (min-width:1024px) { .menu-grid { grid-template-columns: repeat(3,1fr); } }
+
+    .menu-card { position:relative; background:var(--card); border-radius:1rem; overflow:hidden; box-shadow:0 8px 30px rgba(74,44,42,0.1); transition:box-shadow .5s; cursor:pointer; }
+    .menu-card:hover { box-shadow:0 12px 40px rgba(166,38,57,0.2); }
+    .menu-card-image {
+      height:16rem;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg, rgba(250,248,247,0.8), var(--secondary));
+      padding: 0.6rem; /* small padding so contained image breathes */
+    }
+    /* make the copo appear fully: use contain and center */
+    .menu-card-image img { max-width:100%; max-height:100%; object-fit:contain; object-position:center; transition:transform .7s, filter .25s; display:block; border-radius:8px; }
+    .menu-card:hover .menu-card-image img { transform: scale(1.02); filter:brightness(1.03); }
+    .menu-card-content { padding:1.5rem; }
+    .menu-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.5rem; }
+    .menu-card-title { font-size:1.25rem; font-weight:600; }
+    .menu-card-price { font-size:1.125rem; font-weight:700; color:var(--primary); }
+    .menu-card-desc { color:var(--muted-foreground); font-size:.875rem; }
+
+    /* Combos: added styles so the three boxes look polished and consistent */
+    .combos-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 768px) {
+      .combos-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .combo-card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(74,44,42,0.06);
+      border: 1px solid var(--border);
+      transition: transform .2s ease, box-shadow .2s ease;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-height: 160px;
+    }
+
+    .combo-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(74,44,42,0.12);
+    }
+
+    .combo-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .combo-price {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .combo-desc {
+      color: var(--muted-foreground);
+      font-size: 0.95rem;
+      line-height: 1.25;
+    }
+
+    /* Additionals */
+    .additionals-title { font-size:1.875rem; font-weight:700; text-align:center; margin-bottom:1rem; margin-top:4rem; }
+    .additionals-subtitle { text-align:center; color:var(--muted-foreground); margin-bottom:2.5rem; }
+    .additionals-grid { display:grid; gap:1rem; }
+    @media (min-width:640px) { .additionals-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (min-width:1024px) { .additionals-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (min-width:1280px) { .additionals-grid { grid-template-columns: repeat(5,1fr); } }
+
+    .additional-item { display:flex; align-items:center; justify-content:space-between; padding:1rem; background:var(--card); border-radius:.75rem; border:1px solid var(--border); transition:all .3s; cursor:default; }
+    .additional-left { display:flex; align-items:center; gap:.75rem; }
+    .additional-icon { font-size:1.5rem; }
+    .additional-name { font-weight:500; }
+    .additional-price { color:var(--primary); font-weight:600; }
+
+    /* Features / Contact / Footer */
+    .features-grid { display:grid; gap:2rem; }
+    @media (min-width:768px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (min-width:1024px) { .features-grid { grid-template-columns: repeat(4,1fr); } }
+    .feature-card { text-align:center; padding:1.5rem; }
+    .feature-icon { font-size:3rem; margin-bottom:1rem; animation:float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+    .feature-title { font-size:1.25rem; font-weight:600; margin-bottom:.5rem; }
+    .feature-desc { color:var(--muted-foreground); }
+
+    .contact-section { background: linear-gradient(135deg, var(--chocolate), var(--chocolate-light)); color:var(--primary-foreground); }
+    .contact-grid { display:grid; gap:2rem; max-width:800px; margin:0 auto; }
+    @media (min-width:768px) { .contact-grid { grid-template-columns: repeat(3,1fr); } }
+    .contact-card { display:flex; flex-direction:column; align-items:center; padding:2rem; background:rgba(255,255,255,0.1); border-radius:1rem; backdrop-filter:blur(10px); text-decoration:none; color:var(--primary-foreground); transition:background .3s; }
+    .contact-card:hover { background: rgba(255,255,255,0.2); }
+    .contact-icon { font-size:2.5rem; margin-bottom:1rem; }
+    .contact-title { font-size:1.25rem; font-weight:600; margin-bottom:.5rem; }
+    .contact-info { color: rgba(250,248,247,0.8); text-align:center; }
+
+    .contact-hours { text-align:center; margin-top:4rem; }
+    .contact-hours p:first-child { color: rgba(250,248,247,0.6); margin-bottom:1rem; }
+    .contact-hours p:last-child { font-family:'Playfair Display', serif; font-size:1.25rem; }
+
+    .footer { background:var(--chocolate); color:rgba(250,248,247,0.6); padding:2rem 0; text-align:center; }
+    .footer p { display:flex; align-items:center; justify-content:center; gap:.5rem; }
+    .footer .heart { color:var(--strawberry-light); }
+    .footer .copyright { margin-top:.5rem; font-size:.875rem; }
+
+    /* Modal / Order UI */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:300; }
+    .modal-backdrop.open { display:flex; }
+    .order-modal { width:420px; max-width:calc(100% - 32px); background:var(--card); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.25); overflow:hidden; }
+    .order-modal header { padding:1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)); }
+    .order-modal .body { padding:1rem; max-height:60vh; overflow:auto; }
+    .order-modal footer { padding:.75rem; border-top:1px solid var(--border); display:flex; gap:.5rem; justify-content:flex-end; background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent); }
+    .order-radio, .order-checkboxes { display:flex; flex-direction:column; gap:.5rem; margin-bottom:1rem; }
+    .order-item { display:flex; align-items:center; justify-content:space-between; padding:.6rem; border-radius:8px; border:1px solid var(--border); }
+    .order-item input[type="checkbox"], .order-item input[type="radio"] { margin-right:.6rem; }
+    .qty-controls { display:flex; gap:.5rem; align-items:center; }
+    .qty-controls button { padding:.4rem .6rem; border-radius:6px; border:1px solid var(--border); background:transparent; cursor:pointer; }
+    .summary-line { display:flex; justify-content:space-between; align-items:center; font-weight:700; margin-top:.5rem; }
+
+    input[type="number"], input[type="text"], textarea {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .5rem;
+      background: #fff;
+      color: var(--foreground);
+    }
+    input[type="number"]:focus, input[type="text"]:focus, textarea:focus {
+      box-shadow: 0 0 0 4px rgba(166,38,57,0.08);
+      outline: none;
+    }
+
+    @media (max-width:980px) { .hero { min-height:50vh; } .logo img { height:56px; } }
+    @media (max-width:640px) { :root{ --logo-height:48px } .hero h1 { font-size:2rem } .order-modal { width:92%; } }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="#" class="logo" aria-label="Chocoberry — Copos de morango com chocolate">
+          <img src="https://i.ibb.co/RTkDPVcg/file-00000000fdc4720e8311b434973b514c.png" alt="Chocoberry logo" loading="eager">
+          <div class="brand-text">
+            <span class="title">Chocoberry</span>
+            <span class="tag"></span>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Principal">
+          <a href="#cardapio">Cardápio</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#contato">Contato</a>
+        </nav>
+
+        <!-- Header "Pedir Agora": opens same order modal as "Fazer Pedido" -->
+        <a href="#cardapio" id="headerOrderBtn" class="btn btn-primary" role="button">Pedir Agora</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1587393855524-087f83d95bc9?w=1920&q=80" alt="Copo Chocoberry — morangos com cobertura de chocolate">
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-content container">
+      <span class="hero-badge">🍓 Copos Chocoberry</span>
+      <h1 id="heroTitle">Chocoberry</h1>
+      <p>Copos com morango e cobertura de chocolate — escolha seus adicionais e faça seu pedido para retirada no local.</p>
+      <div class="hero-buttons">
+        <a href="#cardapio" id="viewMenuBtn" class="btn btn-primary">Ver Cardápio</a>
+        <a href="#cardapio" id="openOrderBtn" class="btn btn-cta" role="button">Fazer Pedido</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="section menu-section" id="cardapio">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Nosso Cardápio</span>
+        <h2 class="section-title">Copo Chocoberry</h2>
+        <p class="section-subtitle">Morangos frescos com cobertura cremosa de chocolate. Monte com toppings crocantes e doces.</p>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card" data-product-id="copo-chocoberry" data-product-name="Copo Chocoberry" data-product-price="18.00" tabindex="0" role="button" aria-pressed="false">
+          <div class="menu-card-image">
+            <img src="https://i.imgur.com/EYt5DmV.png" alt="Copo Chocoberry — morango com chocolate">
+          </div>
+          <div class="menu-card-content">
+            <div class="menu-card-header">
+              <h3 class="menu-card-title">Copo Chocoberry</h3>
+              <span class="menu-card-price" id="basePriceText">R$ 18,00</span>
+            </div>
+            <p class="menu-card-desc">Delicioso copo de morangos frescos cobertos com chocolate belga. Personalize com granola, castanhas, M&Ms e caldas.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" aria-hidden="true" style="opacity:0.98;">
+          <div class="menu-card-image">
+            <img src="https://i.imgur.com/jV4HJNf.png" alt="Destaque Chocoberry">
+          </div>
+          <div class="menu-card-content">
+            <div class="menu-card-header">
+              <h3 class="menu-card-title">Edições Especiais</h3>
+              <span class="menu-card-price">Sob consulta</span>
+            </div>
+            <p class="menu-card-desc">Caixas e encomendas para eventos. Fale conosco pelo WhatsApp para orçamentos e personalizações.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="additionals-title">✨ Adicionais</h3>
+      <p class="additionals-subtitle">Personalize seu copo com os toppings da sua preferência (retirada no local).</p>
+
+      <div class="additionals-grid" id="additionalsGrid">
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🌾</span><span class="additional-name">Granola</span></div>
+          <span class="additional-price">+ R$ 2,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🥜</span><span class="additional-name">Castanha-do-Pará</span></div>
+          <span class="additional-price">+ R$ 3,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🌰</span><span class="additional-name">Castanha-de-Caju</span></div>
+          <span class="additional-price">+ R$ 3,00</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🌰</span><span class="additional-name">Amêndoas</span></div>
+          <span class="additional-price">+ R$ 3,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🥥</span><span class="additional-name">Coco Ralado</span></div>
+          <span class="additional-price">+ R$ 1,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🌾</span><span class="additional-name">Aveia</span></div>
+          <span class="additional-price">+ R$ 1,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🥣</span><span class="additional-name">Flocos de Arroz / Cereais</span></div>
+          <span class="additional-price">+ R$ 1,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🥜</span><span class="additional-name">Amendoim</span></div>
+          <span class="additional-price">+ R$ 2,00</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🥣</span><span class="additional-name">Sucrilhos</span></div>
+          <span class="additional-price">+ R$ 1,80</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🥛</span><span class="additional-name">Leite Ninho</span></div>
+          <span class="additional-price">+ R$ 2,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🍬</span><span class="additional-name">M&Ms</span></div>
+          <span class="additional-price">+ R$ 3,00</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🍫</span><span class="additional-name">Calda de Chocolate ao Leite</span></div>
+          <span class="additional-price">+ R$ 2,50</span>
+        </div>
+
+        <div class="additional-item">
+          <div class="additional-left"><span class="additional-icon">🤍</span><span class="additional-name">Calda de Chocolate Branco</span></div>
+          <span class="additional-price">+ R$ 2,50</span>
+        </div>
+      </div>
+
+      <!-- Combos section with styles applied above -->
+      <div class="combos-grid" aria-hidden="true">
+        <div class="combo-card">
+          <div class="combo-title">Caixa com 6 unidades</div>
+          <div class="combo-price">A partir de R$ 45,00</div>
+          <div class="combo-desc">Perfeito para presentear ou compartilhar</div>
+        </div>
+
+        <div class="combo-card">
+          <div class="combo-title">Caixa com 12 unidades</div>
+          <div class="combo-price">A partir de R$ 85,00</div>
+          <div class="combo-desc">Ideal para festas e eventos</div>
+        </div>
+
+        <div class="combo-card">
+          <div class="combo-title">Caixa com 24 unidades</div>
+          <div class="combo-price">A partir de R$ 160,00</div>
+          <div class="combo-desc">Para grandes celebrações</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section" id="sobre">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Por que nos escolher</span>
+        <h2 class="section-title">A Doçura que Você Merece</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🍓</div>
+          <h3 class="feature-title">Morangos Frescos</h3>
+          <p class="feature-desc">Selecionados diariamente para garantir a melhor qualidade e sabor.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="animation-delay:0.2s;">🍫</div>
+          <h3 class="feature-title">Chocolate Belga</h3>
+          <p class="feature-desc">Utilizamos apenas chocolate belga de alta qualidade em nossas receitas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="animation-delay:0.4s;">💝</div>
+          <h3 class="feature-title">Feito com Amor</h3>
+          <p class="feature-desc">Cada item é preparado artesanalmente com muito carinho.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="animation-delay:0.6s;">📍</div>
+          <h3 class="feature-title">Retirada no Local</h3>
+          <p class="feature-desc">Pedido disponível para retirada em nossa loja — não realizamos entrega.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section contact-section" id="contato">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Faça seu Pedido</span>
+        <h2 class="section-title">Ficou com Vontade?</h2>
+        <p class="section-subtitle">Atendimento no local — fazemos vendas para retirada em nossa loja. Para pedidos rápidos, envie uma mensagem pelo WhatsApp.</p>
+      </div>
+
+      <div class="contact-grid">
+        <a href="https://wa.me/5521997305179" target="_blank" class="contact-card" rel="noopener noreferrer">
+          <span class="contact-icon">📱</span>
+          <h3 class="contact-title">WhatsApp</h3>
+          <p class="contact-info">(21) 99730-5179</p>
+        </a>
+        <a href="https://instagram.com/chocoberry" target="_blank" class="contact-card" rel="noopener noreferrer">
+          <span class="contact-icon">📸</span>
+          <h3 class="contact-title">Instagram</h3>
+          <p class="contact-info">@chocoberry</p>
+        </a>
+        <div class="contact-card">
+          <span class="contact-icon">📍</span>
+          <h3 class="contact-title">Localização</h3>
+          <p class="contact-info">Rio de janeiro, RJ — Retirada na loja</p>
+        </div>
+      </div>
+
+      <div class="contact-hours">
+        <p>Horário de Funcionamento</p>
+        <p>Segunda a Sábado: 9h às 20h</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Feito com <span class="heart">❤️</span> por Chocoberry</p>
+      <p class="copyright">© <span id="currentYear">2026</span> Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <!-- ORDER MODAL -->
+  <div class="modal-backdrop" id="orderBackdrop" aria-hidden="true">
+    <div class="order-modal" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+      <header>
+        <div id="orderTitle"><strong>Fazer Pedido — Chocoberry</strong></div>
+        <button id="closeOrderModal" aria-label="Fechar" style="background:transparent;border:none;font-size:1.2rem;cursor:pointer;">✕</button>
+      </header>
+
+      <div class="body">
+        <!-- Step 1 -->
+        <div id="step1" class="order-step">
+          <h4>1. Escolha o copo</h4>
+          <div style="margin:.5rem 0;padding:.6rem;border-radius:8px;border:1px solid var(--border);">
+            <div style="font-weight:700">Copo Chocoberry</div>
+            <div style="color:var(--muted-foreground)">Morangos frescos com chocolate belga</div>
+            <div style="margin-top:.6rem;display:flex;justify-content:space-between;align-items:center;">
+              <div class="qty-controls">
+                <button type="button" id="decQty" aria-label="Diminuir quantidade">−</button>
+                <input id="modalQty" type="number" min="1" value="1" aria-label="Quantidade" style="width:56px;text-align:center;padding:.35rem;border-radius:6px;border:1px solid var(--border)" />
+                <button type="button" id="incQty" aria-label="Aumentar quantidade">+</button>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:.9rem;color:var(--muted-foreground)">Unitário</div>
+                <div style="font-weight:800;color:var(--primary)">R$ 18,00</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.6rem;">
+            <button id="cancelOrder1" class="btn btn-outline">Cancelar</button>
+            <button id="toStep2" class="btn btn-primary">Escolher Adicionais →</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" class="order-step" style="display:none;">
+          <h4>2. Escolha os adicionais</h4>
+
+          <div class="order-checkboxes" id="modalAddonsList" style="margin-top:.5rem;">
+            <label class="order-item"><span><input type="checkbox" value="Granola" data-price="2.50"> Granola</span><span style="color:var(--primary)">R$ 2,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Castanha-do-Pará" data-price="3.50"> Castanha-do-Pará</span><span style="color:var(--primary)">R$ 3,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Castanha-de-Caju" data-price="3.00"> Castanha-de-Caju</span><span style="color:var(--primary)">R$ 3,00</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Amêndoas" data-price="3.50"> Amêndoas</span><span style="color:var(--primary)">R$ 3,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Coco Ralado" data-price="1.50"> Coco Ralado</span><span style="color:var(--primary)">R$ 1,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Aveia" data-price="1.50"> Aveia</span><span style="color:var(--primary)">R$ 1,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Flocos de Arroz" data-price="1.50"> Flocos de Arroz / Cereais</span><span style="color:var(--primary)">R$ 1,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Amendoim" data-price="2.00"> Amendoim</span><span style="color:var(--primary)">R$ 2,00</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Sucrilhos" data-price="1.80"> Sucrilhos</span><span style="color:var(--primary)">R$ 1,80</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Leite Ninho" data-price="2.50"> Leite Ninho</span><span style="color:var(--primary)">R$ 2,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="M&Ms" data-price="3.00"> M&Ms</span><span style="color:var(--primary)">R$ 3,00</span></label>
+
+            <label class="order-item"><span><input type="checkbox" value="Calda de Chocolate ao Leite" data-price="2.50"> Calda de Chocolate ao Leite</span><span style="color:var(--primary)">R$ 2,50</span></label>
+            <label class="order-item"><span><input type="checkbox" value="Calda de Chocolate Branco" data-price="2.50"> Calda de Chocolate Branco</span><span style="color:var(--primary)">R$ 2,50</span></label>
+          </div>
+
+          <div style="display:flex;gap:.5rem;justify-content:space-between;align-items:center;margin-top:.6rem;">
+            <button id="backToStep1" class="btn btn-outline">← Voltar</button>
+            <div style="display:flex;gap:.5rem;">
+              <button id="clearAddons" class="btn btn-outline">Limpar</button>
+              <button id="toStep3" class="btn btn-primary">Finalizar Pedido →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step3" class="order-step" style="display:none;">
+          <h4>3. Finalizar pedido</h4>
+
+          <div style="margin-top:.5rem;">
+            <label style="display:block;font-size:.9rem;margin-bottom:.25rem;">Nome</label>
+            <input id="custName" type="text" placeholder="Seu nome (opcional)" style="width:100%;padding:.6rem;border-radius:8px;border:1px solid var(--border)" />
+          </div>
+
+          <div style="margin-top:.5rem;">
+            <label style="display:block;font-size:.9rem;margin-bottom:.25rem;">Observações</label>
+            <textarea id="custNotes" rows="3" placeholder="Ex.: retirar às 15h, sem açúcar extra..." style="width:100%;padding:.6rem;border-radius:8px;border:1px solid var(--border)"></textarea>
+          </div>
+
+          <div style="margin-top:.6rem;">
+            <div class="summary-line"><div>Quantidade</div><div id="summaryQty">1</div></div>
+            <div class="summary-line"><div>Adicionais</div><div id="summaryAddons">Nenhum</div></div>
+            <div class="summary-line" style="margin-top:.5rem;"><div>Total</div><div id="summaryTotal">R$ 18,00</div></div>
+            <div style="font-size:.85rem;color:var(--muted-foreground);margin-top:.5rem;">Observação: pedido para retirada no local — não fazemos entrega.</div>
+          </div>
+
+          <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.75rem;">
+            <button id="backToStep2" class="btn btn-outline">← Voltar</button>
+            <button id="sendWhatsapp" class="btn btn-primary" aria-label="Enviar pedido via WhatsApp">Enviar via WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Small script to handle modal/order logic and WhatsApp link -->
+  <script>
+    // dynamic year
+    (function(){
+      const yEl = document.getElementById('currentYear');
+      if (yEl) yEl.textContent = new Date().getFullYear();
+    })();
+
+    // keep base price consistent
+    (function(){
+      const basePriceEl = document.getElementById('basePriceText');
+      if (basePriceEl) basePriceEl.textContent = 'R$ 18,00';
+    })();
+
+    (function(){
+      // elements (guarded)
+      const openOrderBtn = document.getElementById('openOrderBtn');
+      const headerOrderBtn = document.getElementById('headerOrderBtn');
+      const menuProductCard = document.querySelector('.menu-card[data-product-id="copo-chocoberry"]');
+      const backdrop = document.getElementById('orderBackdrop');
+      const modal = backdrop ? backdrop.querySelector('.order-modal') : null;
+      const closeBtn = document.getElementById('closeOrderModal');
+
+      // steps
+      const step1 = document.getElementById('step1');
+      const step2 = document.getElementById('step2');
+      const step3 = document.getElementById('step3');
+      const toStep2 = document.getElementById('toStep2');
+      const backToStep1 = document.getElementById('backToStep1');
+      const toStep3 = document.getElementById('toStep3');
+      const backToStep2 = document.getElementById('backToStep2');
+      const cancelOrder1 = document.getElementById('cancelOrder1');
+
+      // qty controls
+      const decQty = document.getElementById('decQty');
+      const incQty = document.getElementById('incQty');
+      const modalQty = document.getElementById('modalQty');
+
+      // addons & summary
+      const modalAddonsList = document.getElementById('modalAddonsList');
+      const summaryQty = document.getElementById('summaryQty');
+      const summaryAddons = document.getElementById('summaryAddons');
+      const summaryTotal = document.getElementById('summaryTotal');
+      const clearAddons = document.getElementById('clearAddons');
+
+      // finalize
+      const sendWhatsapp = document.getElementById('sendWhatsapp');
+      const custName = document.getElementById('custName');
+      const custNotes = document.getElementById('custNotes');
+
+      // requested number with country code +55 for wa.me
+      const WHATSAPP_NUMBER = '5521997305179';
+      const UNIT_PRICE = 18.00;
+
+      function formatBRL(v) {
+        return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+
+      // focus trap helper (simple)
+      function trapFocus(container) {
+        if (!container) return () => {};
+        const focusable = Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])'))
+          .filter(el => el.offsetParent !== null);
+        if (!focusable.length) return () => {};
+        let i = 0;
+        focusable[0].focus();
+        function handleKey(e) {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              i = (i - 1 + focusable.length) % focusable.length;
+            } else {
+              i = (i + 1) % focusable.length;
+            }
+            e.preventDefault();
+            focusable[i].focus();
+          } else if (e.key === 'Escape') {
+            closeModal();
+          }
+        }
+        document.addEventListener('keydown', handleKey);
+        return () => document.removeEventListener('keydown', handleKey);
+      }
+
+      let removeFocusTrap = null;
+
+      function openModal() {
+        const anchor = document.getElementById('cardapio');
+        if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // prevent background scroll
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+          if (!backdrop) return;
+          backdrop.classList.add('open');
+          backdrop.setAttribute('aria-hidden', 'false');
+          showStep(1);
+          const first = modal ? (modal.querySelector('input, button, textarea, [tabindex]') || modal) : null;
+          if (first) first.focus();
+          removeFocusTrap = trapFocus(modal || backdrop);
+        }, 250);
+      }
+
+      function closeModal() {
+        if (!backdrop) return;
+        backdrop.classList.remove('open');
+        backdrop.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (removeFocusTrap) { removeFocusTrap(); removeFocusTrap = null; }
+        if (openOrderBtn) openOrderBtn.focus();
+      }
+
+      function showStep(n) {
+        if (step1) step1.style.display = (n === 1) ? 'block' : 'none';
+        if (step2) step2.style.display = (n === 2) ? 'block' : 'none';
+        if (step3) step3.style.display = (n === 3) ? 'block' : 'none';
+        updateSummary();
+      }
+
+      function updateSummary() {
+        const qty = Math.max(1, parseInt((modalQty && modalQty.value) || '1', 10));
+        if (summaryQty) summaryQty.textContent = qty;
+        const checked = modalAddonsList ? Array.from(modalAddonsList.querySelectorAll('input[type="checkbox"]:checked')) : [];
+        const addonsNames = checked.map(i => i.value);
+        const addonsTotal = checked.reduce((s, i) => s + parseFloat(i.getAttribute('data-price') || '0'), 0);
+        if (summaryAddons) summaryAddons.textContent = addonsNames.length ? addonsNames.join(', ') : 'Nenhum';
+        const total = (UNIT_PRICE * qty) + (addonsTotal * qty);
+        if (summaryTotal) summaryTotal.textContent = formatBRL(total);
+      }
+
+      // wire events
+      if (openOrderBtn) openOrderBtn.addEventListener('click', function(e){ e.preventDefault(); openModal(); });
+      if (headerOrderBtn) headerOrderBtn.addEventListener('click', function(e){ e.preventDefault(); openModal(); });
+
+      if (menuProductCard) {
+        menuProductCard.addEventListener('click', function(){ openModal(); });
+        menuProductCard.addEventListener('keypress', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); menuProductCard.click(); }});
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (backdrop) backdrop.addEventListener('click', function(e){ if (e.target === backdrop) closeModal(); });
+
+      // qty
+      if (incQty) incQty.addEventListener('click', function(){ modalQty.value = Math.max(1, parseInt(modalQty.value||'1') + 1); updateSummary(); });
+      if (decQty) decQty.addEventListener('click', function(){ modalQty.value = Math.max(1, parseInt(modalQty.value||'1') - 1); updateSummary(); });
+      if (modalQty) modalQty.addEventListener('change', function(){ if (parseInt(modalQty.value||'1') < 1) modalQty.value = 1; updateSummary(); });
+
+      // steps
+      if (toStep2) toStep2.addEventListener('click', function(){ showStep(2); });
+      if (backToStep1) backToStep1.addEventListener('click', function(){ showStep(1); });
+      if (toStep3) toStep3.addEventListener('click', function(){ showStep(3); });
+      if (backToStep2) backToStep2.addEventListener('click', function(){ showStep(2); });
+      if (cancelOrder1) cancelOrder1.addEventListener('click', function(){ closeModal(); });
+
+      if (clearAddons && modalAddonsList) clearAddons.addEventListener('click', function(){
+        modalAddonsList.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+        updateSummary();
+      });
+
+      if (modalAddonsList) modalAddonsList.addEventListener('change', updateSummary);
+
+      // send to WhatsApp with emojis for clarity
+      if (sendWhatsapp) sendWhatsapp.addEventListener('click', function(){
+        const qty = Math.max(1, parseInt((modalQty && modalQty.value) || '1', 10));
+        const checked = modalAddonsList ? Array.from(modalAddonsList.querySelectorAll('input[type="checkbox"]:checked')) : [];
+        const addons = checked.map(i => ({ name: i.value, price: parseFloat(i.getAttribute('data-price') || 0) }));
+        const addonsText = addons.length ? addons.map(a => `${a.name} (${formatBRL(a.price)})`).join(', ') : 'Nenhum';
+        const addonsTotal = addons.reduce((s, a) => s + a.price, 0);
+        const total = (UNIT_PRICE * qty) + (addonsTotal * qty);
+        const name = (custName && custName.value || '').trim();
+        const notes = (custNotes && custNotes.value || '').trim();
+
+        // build plain message with emojis, then encode once
+        let msg = '';
+        msg += '🧾 *Pedido Chocoberry*' + '\n';
+        msg += '🍽️ Produto: Copo Chocoberry' + '\n';
+        msg += '💰 Valor unitário: ' + formatBRL(UNIT_PRICE) + '\n';
+        msg += '🔢 Quantidade: ' + qty + '\n';
+        msg += '➕ Adicionais: ' + addonsText + '\n';
+        msg += '💵 Total: ' + formatBRL(total) + '\n';
+        msg += '📍 Retirada: Retirada no local (loja)' + '\n';
+        if (name) msg += '👤 Nome: ' + name + '\n';
+        if (notes) msg += '📝 Observações: ' + notes + '\n';
+        msg += '\n' + '⌛ Aguardo confirmação, por favor.';
+
+        const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+        // open new tab/window (no referrer relationship)
+        const win = window.open(url, '_blank');
+        if (win) win.opener = null;
+      });
+
+      // close modal with Escape
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && backdrop && backdrop.classList.contains('open')) closeModal(); });
+
+      // initial totals
+      updateSummary();
+    })();
+  </script>
+</body>
+</html>
